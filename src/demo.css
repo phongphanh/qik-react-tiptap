@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  background: #e7edf5;
+}
+
+.demo-shell {
+  box-sizing: border-box;
+  min-height: 100dvh;
+  padding: 32px;
+}
