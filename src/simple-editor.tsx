@@ -48,6 +48,7 @@ export type SimpleEditorExtensionsProp =
   | ((defaultExtensions: Extensions) => Extensions);
 
 export interface SimpleEditorProps {
+  characterLimit?: number | null;
   content?: string | JSONContent;
   value?: SimpleEditorValue;
   defaultValue?: SimpleEditorValue;
@@ -74,6 +75,7 @@ export interface SimpleEditorProps {
 }
 
 export function SimpleEditor({
+  characterLimit = null,
   content,
   value,
   defaultValue,
@@ -106,6 +108,7 @@ export function SimpleEditor({
     () => {
       const defaultExtensions = createSimpleEditorExtensions({
         ...extensionOptions,
+        characterLimit,
         placeholder: labels?.placeholder,
       });
 
@@ -115,7 +118,7 @@ export function SimpleEditor({
 
       return extensionsProp ? [...defaultExtensions, ...extensionsProp] : defaultExtensions;
     },
-    [extensionOptions, extensionsProp, labels?.placeholder],
+    [characterLimit, extensionOptions, extensionsProp, labels?.placeholder],
   );
 
   const initialContent =
@@ -263,7 +266,7 @@ export function SimpleEditor({
         />
 
         <div className="rt-editor-footer">
-          <span>{toolbarState.characterCount.toLocaleString()} characters</span>
+          <span>{formatCharacterCount(toolbarState.characterCount, characterLimit)}</span>
         </div>
 
         <FloatingToolbar
@@ -319,4 +322,14 @@ function isSameEditorContent(editor: Editor, value: SimpleEditorValue) {
   }
 
   return JSON.stringify(editor.getJSON()) === JSON.stringify(value);
+}
+
+function formatCharacterCount(count: number, limit: number | null) {
+  const formattedCount = count.toLocaleString();
+
+  if (limit === null) {
+    return `${formattedCount} characters`;
+  }
+
+  return `${formattedCount} / ${limit.toLocaleString()} characters`;
 }

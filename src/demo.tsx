@@ -9,7 +9,7 @@ import React from "react";
 function Demo() {
   return (
     <main className="demo-shell">
-      <SimpleEditor />
+      <SimpleEditor characterLimit={1000} />
     </main>
   );
 }

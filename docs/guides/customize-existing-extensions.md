@@ -14,9 +14,6 @@ export function Editor() {
   return (
     <SimpleEditor
       extensionOptions={{
-        characterCount: {
-          limit: 10000,
-        },
         link: {
           autolink: false,
           defaultProtocol: "https",
@@ -35,6 +32,12 @@ export function Editor() {
     />
   );
 }
+```
+
+Use the top-level `characterLimit` prop for the common maximum-length case.
+
+```tsx
+<SimpleEditor characterLimit={10000} />
 ```
 
 ## Disable Built-In Extensions

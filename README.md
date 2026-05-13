@@ -57,6 +57,7 @@ export function EditorPage() {
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
+| `characterLimit` | `number \| null` | `null` | Maximum number of characters allowed by the character count extension |
 | `content` | `string \| JSONContent` | `"<h2>Start writing</h2>…"` | Initial HTML or ProseMirror JSON |
 | `value` | `string \| JSONContent` | — | Controlled value for form integrations |
 | `defaultValue` | `string \| JSONContent` | — | Uncontrolled initial value |
@@ -106,8 +107,8 @@ Configure built-in extensions with `extensionOptions`:
 
 ```tsx
 <SimpleEditor
+  characterLimit={10000}
   extensionOptions={{
-    characterCount: { limit: 10000 },
     link: { autolink: false },
     table: { table: { resizable: true, renderWrapper: true, cellMinWidth: 80 } },
   }}

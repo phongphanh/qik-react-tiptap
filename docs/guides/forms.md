@@ -29,6 +29,7 @@ export function ArticleForm() {
           <SimpleEditor
             value={field.value}
             output="html"
+            characterLimit={10000}
             invalid={fieldState.invalid}
             onBlur={field.onBlur}
             onChange={field.onChange}
@@ -90,9 +91,24 @@ interface ArticleFormValues {
 - Use `output="json"` when you need lossless rich text, custom extensions, or stable controlled values.
 - Use `output="text"` for plain-text fields, search previews, or validation-only flows.
 
+## Character Limit
+
+Pass `characterLimit` to prevent input beyond a maximum length and show the current count against that limit in the editor footer.
+
+```tsx
+<SimpleEditor
+  value={field.value}
+  output="html"
+  characterLimit={10000}
+  onBlur={field.onBlur}
+  onChange={field.onChange}
+/>
+```
+
 ## Checklist
 
 - Always pass `onBlur` from the form field so touched state works.
 - Pass `invalid` from form state to style validation errors.
+- Use `characterLimit` when the field has a product or database length limit.
 - Prefer `output="json"` when the content uses custom nodes or marks.
 - Sanitize HTML on the server before displaying user-generated content.

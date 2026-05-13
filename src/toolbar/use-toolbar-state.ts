@@ -13,51 +13,49 @@ const emptyToolbarState: ToolbarState = {
 };
 
 export function useToolbarState(editor: Editor | null) {
-  return (
-    useEditorState({
-      editor,
-      selector: ({ editor }) => {
-        if (!editor) {
-          return emptyToolbarState;
-        }
+  const state = useEditorState({
+    editor,
+    selector: ({ editor }) => (editor ? getToolbarState(editor) : null),
+  });
 
-        const active: Record<string, boolean> = {};
-        const disabled: Record<string, boolean> = {};
+  return state ?? (editor ? getToolbarState(editor) : emptyToolbarState);
+}
 
-        for (const item of getToolbarButtons()) {
-          active[item.id] = item.isActive?.(editor) ?? false;
-          disabled[item.id] = item.isDisabled?.(editor) ?? false;
-        }
+function getToolbarState(editor: Editor): ToolbarState {
+  const active: Record<string, boolean> = {};
+  const disabled: Record<string, boolean> = {};
 
-        let activeListId: string | undefined;
-        for (const item of listItems) {
-          const isActive = item.isActive?.(editor) ?? false;
-          active[item.id] = isActive;
-          if (isActive) {
-            activeListId = item.id;
-          }
-        }
+  for (const item of getToolbarButtons()) {
+    active[item.id] = item.isActive?.(editor) ?? false;
+    disabled[item.id] = item.isDisabled?.(editor) ?? false;
+  }
 
-        for (const palette of colorPalettes) {
-          active[palette.id] = palette.isActive?.(editor) ?? false;
-        }
+  let activeListId: string | undefined;
+  for (const item of listItems) {
+    const isActive = item.isActive?.(editor) ?? false;
+    active[item.id] = isActive;
+    if (isActive) {
+      activeListId = item.id;
+    }
+  }
 
-        active.link = editor.isActive("link");
+  for (const palette of colorPalettes) {
+    active[palette.id] = palette.isActive?.(editor) ?? false;
+  }
 
-        const rawFontSize = editor.getAttributes("textStyle").fontSize as string | undefined;
-        const currentFontSize = rawFontSize ? rawFontSize.replace("px", "") : null;
+  active.link = editor.isActive("link");
 
-        return {
-          active,
-          activeListId,
-          characterCount: getCharacterCount(editor),
-          disabled,
-          currentBlockLabel: getCurrentBlockLabel(editor),
-          currentFontSize,
-        };
-      },
-    }) ?? emptyToolbarState
-  );
+  const rawFontSize = editor.getAttributes("textStyle").fontSize as string | undefined;
+  const currentFontSize = rawFontSize ? rawFontSize.replace("px", "") : null;
+
+  return {
+    active,
+    activeListId,
+    characterCount: getCharacterCount(editor),
+    disabled,
+    currentBlockLabel: getCurrentBlockLabel(editor),
+    currentFontSize,
+  };
 }
 
 function getCharacterCount(editor: Editor) {
