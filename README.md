@@ -14,6 +14,7 @@ Install peer Tiptap extensions if your package manager does not install peers au
 
 ```bash
 pnpm add \
+  @tiptap/extension-bubble-menu \
   @tiptap/extension-character-count \
   @tiptap/extension-highlight \
   @tiptap/extension-image \
@@ -155,7 +156,7 @@ Return either a URL string or image attributes from `onImageUpload`:
 - **Table** — Grid picker (10 × 10, hover to select dimensions) for insertion
 
 ### Floating toolbar (text selection)
-Appears above any text selection. Contains: block format, inline marks, text/highlight color, lists, alignment, quote, link, clear formatting.
+Powered by Tiptap's BubbleMenu. Appears above any text selection and contains: block format, inline marks, text/highlight color, lists, alignment, quote, link, clear formatting.
 
 ### Link toolbar
 Appears when the cursor is inside a link. Shows the URL, with buttons to open in new tab, edit (URL-only popover), or remove the link.

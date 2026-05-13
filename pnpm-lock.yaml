@@ -39,6 +39,9 @@ importers:
       '@tiptap/core':
         specifier: ^3.23.2
         version: 3.23.2(@tiptap/pm@3.23.2)
+      '@tiptap/extension-bubble-menu':
+        specifier: ^3.23.2
+        version: 3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2)
       '@tiptap/extension-character-count':
         specifier: ^3.23.2
         version: 3.23.2(@tiptap/extensions@3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2))
@@ -1777,7 +1780,6 @@ snapshots:
       '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.23.2(@tiptap/pm@3.23.2)
       '@tiptap/pm': 3.23.2
-    optional: true
 
   '@tiptap/extension-bullet-list@3.23.2(@tiptap/extension-list@3.23.2(@tiptap/core@3.23.2(@tiptap/pm@3.23.2))(@tiptap/pm@3.23.2))':
     dependencies:

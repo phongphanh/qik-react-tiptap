@@ -75,16 +75,40 @@
   gap: 4px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
+  scrollbar-width: none;
   border: 1px solid var(--rt-border);
   border-radius: var(--rt-radius);
-  background: var(--rt-background);
+  /* Slight transparency so backdrop-filter has something to blur through */
+  background: color-mix(in srgb, var(--rt-background) 92%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   box-shadow: var(--rt-shadow);
   padding: 5px;
-  transform: translate(-50%, calc(-100% - 10px));
+  /* will-change promotes the element to its own GPU compositing layer so
+     rAF-driven transform updates render without layout recalculation */
+  will-change: transform;
+  animation: rt-bubble-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.rt-floating-toolbar[data-side="bottom"] {
-  transform: translate(-50%, 10px);
+.rt-floating-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* CSS `scale` is a standalone property, separate from `transform`.
+   Floating UI positions via `transform: translate(x,y)` — using `scale`
+   here stacks on top without touching the translate, so the menu appears
+   at the correct position from frame 0 with no slide-from-origin bug.
+   No `transition: transform` — with per-frame rAF updates that property
+   causes a constant 60ms trailing lag and a slide-in artifact on first show. */
+@keyframes rt-bubble-in {
+  from {
+    opacity: 0;
+    scale: 0.95;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
 }
 
 .rt-floating-toolbar .rt-format-trigger {

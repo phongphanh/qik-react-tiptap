@@ -13,7 +13,6 @@ import { EditorToolbar } from "./toolbar/editor-toolbar";
 import { FloatingToolbar } from "./toolbar/floating-toolbar";
 import { LinkToolbar } from "./toolbar/link-toolbar";
 import { TableToolbar } from "./toolbar/table-toolbar";
-import { useFloatingToolbar } from "./toolbar/use-floating-toolbar";
 import { useLinkToolbar } from "./toolbar/use-link-toolbar";
 import { useTableToolbar } from "./toolbar/use-table-toolbar";
 import { useToolbarState } from "./toolbar/use-toolbar-state";
@@ -183,7 +182,6 @@ export function SimpleEditor({
   }, [editor, value]);
 
   const toolbarState = useToolbarState(editor);
-  const floatingToolbarPosition = useFloatingToolbar(editor);
   const [linkToolbarState, setLinkToolbarState] = useLinkToolbar(editor);
   const tableToolbarState = useTableToolbar(editor);
 
@@ -269,10 +267,11 @@ export function SimpleEditor({
         </div>
 
         <FloatingToolbar
+          disabled={Boolean(linkToolbarState)}
           editor={editor}
           state={toolbarState}
-          position={linkToolbarState ? null : floatingToolbarPosition}
           labels={labels}
+          theme={theme}
         />
         <LinkToolbar
           editor={editor}

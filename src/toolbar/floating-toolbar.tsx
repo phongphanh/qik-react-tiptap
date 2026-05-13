@@ -1,73 +1,112 @@
 import type { Editor } from "@tiptap/core";
+import { BubbleMenu } from "@tiptap/react/menus";
 import * as React from "react";
+import { getThemeAttribute, type SimpleEditorTheme } from "../theme";
 import { Separator } from "../ui/separator";
 import { TooltipProvider } from "../ui/tooltip";
 import { BlockFormatMenu } from "./block-format-menu";
 import { ColorPopover } from "./color-popover";
 import { colorPalettes, toolbarGroups } from "./definitions";
+import { FontSizeMenu } from "./font-size-menu";
 import { LinkPopover } from "./link-popover";
 import { ListMenu } from "./list-menu";
 import { ToolbarButton } from "./toolbar-button";
-import type { FloatingToolbarPosition } from "./use-floating-toolbar";
 import type { ToolbarState } from "./types";
 
 export interface FloatingToolbarProps {
+  disabled?: boolean;
   editor: Editor;
   labels?: {
     linkPlaceholder?: string;
   };
-  position: FloatingToolbarPosition | null;
   state: ToolbarState;
+  theme?: SimpleEditorTheme;
 }
 
 export function FloatingToolbar({
+  disabled = false,
   editor,
   labels,
-  position,
   state,
+  theme = "system",
 }: FloatingToolbarProps) {
-  const toolbarRef = React.useRef<HTMLDivElement>(null);
-  const [measuredSize, setMeasuredSize] = React.useState({
-    height: 44,
-    width: 520,
-  });
+  const scrollContainer = editor.view.dom.closest(".rt-editor-content") as HTMLElement | null;
+  const scrollTarget = scrollContainer ?? window;
 
-  React.useLayoutEffect(() => {
-    if (!position || !toolbarRef.current) {
-      return;
-    }
+  // Tiptap's built-in scroll listener debounces updatePosition by `resizeDelay`
+  // (same handler as window resize), so the menu only repositions after scrolling
+  // stops. We register our own rAF-throttled listener to force an updatePosition
+  // dispatch on every animation frame during scroll.
+  React.useEffect(() => {
+    if (!scrollContainer) return;
 
-    const rect = toolbarRef.current.getBoundingClientRect();
-    setMeasuredSize({
-      height: rect.height,
-      width: rect.width,
-    });
-  }, [position]);
+    let rafId: number | null = null;
 
-  if (!position) {
-    return null;
-  }
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!editor.isDestroyed) {
+          editor.view.dispatch(
+            editor.state.tr.setMeta("rt-text-bubble-menu", "updatePosition"),
+          );
+        }
+      });
+    };
 
-  const left = clamp(position.left, measuredSize.width / 2 + 8, window.innerWidth - measuredSize.width / 2 - 8);
-  const hasRoomAbove = position.top - measuredSize.height - 10 > 8;
-  const top = hasRoomAbove ? position.top : position.top + 28;
+    scrollContainer.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      scrollContainer.removeEventListener("scroll", onScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, [editor, scrollContainer]);
 
   return (
     <TooltipProvider delayDuration={250}>
-      <div
-        ref={toolbarRef}
+      <BubbleMenu
+        editor={editor}
+        pluginKey="rt-text-bubble-menu"
         className="rt-floating-toolbar"
         role="toolbar"
         aria-label="Floating editor toolbar"
-        data-side={hasRoomAbove ? "top" : "bottom"}
-        style={{
-          left,
-          top,
+        data-rt-theme={getThemeAttribute(theme)}
+        updateDelay={60}
+        resizeDelay={60}
+        appendTo={() => document.body}
+        shouldShow={({ editor, state, from, to }) => {
+          if (disabled || !editor.isEditable || state.selection.empty) {
+            return false;
+          }
+
+          if (state.selection.constructor.name === "NodeSelection") {
+            return false;
+          }
+
+          // Don't show inside code blocks — marks like color/font-size don't apply
+          if (editor.isActive("codeBlock")) {
+            return false;
+          }
+
+          return state.doc.textBetween(from, to, "\n").trim().length > 0;
+        }}
+        options={{
+          strategy: "fixed",
+          placement: "top",
+          offset: 10,
+          flip: { padding: 8, fallbackPlacements: ["bottom"] },
+          shift: { padding: 8 },
+          inline: true,
+          hide: true,
+          scrollTarget,
         }}
       >
         <BlockFormatMenu
           editor={editor}
           currentBlockLabel={state.currentBlockLabel}
+        />
+        <FontSizeMenu
+          editor={editor}
+          currentFontSize={state.currentFontSize}
         />
         <Separator />
 
@@ -167,15 +206,7 @@ export function FloatingToolbar({
               </ToolbarButton>
             );
           })}
-      </div>
+      </BubbleMenu>
     </TooltipProvider>
   );
-}
-
-function clamp(value: number, min: number, max: number) {
-  if (max < min) {
-    return Math.min(Math.max(value, 8), window.innerWidth - 8);
-  }
-
-  return Math.min(Math.max(value, min), max);
 }
