@@ -13,6 +13,8 @@ import {
 export interface LinkPopoverProps {
   active?: boolean;
   editor: Editor;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   placeholder?: string;
   textPlaceholder?: string;
   urlOnly?: boolean;
@@ -21,6 +23,8 @@ export interface LinkPopoverProps {
 export function LinkPopover({
   active,
   editor,
+  open,
+  onOpenChange,
   placeholder,
   textPlaceholder,
   urlOnly,
@@ -70,7 +74,13 @@ export function LinkPopover({
   }, [active, editor, text, url, urlOnly]);
 
   return (
-    <Popover onOpenChange={(open) => open && syncFields()}>
+    <Popover
+      open={open}
+      onOpenChange={(next) => {
+        if (next) syncFields();
+        onOpenChange?.(next);
+      }}
+    >
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>

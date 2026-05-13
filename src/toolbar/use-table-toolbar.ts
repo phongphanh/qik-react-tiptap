@@ -45,12 +45,23 @@ export function useTableToolbar(editor: Editor | null) {
         setState(null);
         return;
       }
-      setState({
-        left: rect.left + rect.width / 2,
-        top: rect.top,
-        bottom: rect.bottom,
-        canMergeCells: editor.can().mergeCells(),
-        canSplitCell: editor.can().splitCell(),
+      const left = rect.left + rect.width / 2;
+      const { top, bottom } = rect;
+      const canMergeCells = editor.can().mergeCells();
+      const canSplitCell = editor.can().splitCell();
+
+      setState((prev) => {
+        if (
+          prev &&
+          prev.left === left &&
+          prev.top === top &&
+          prev.bottom === bottom &&
+          prev.canMergeCells === canMergeCells &&
+          prev.canSplitCell === canSplitCell
+        ) {
+          return prev; // same reference → no re-render
+        }
+        return { left, top, bottom, canMergeCells, canSplitCell };
       });
     };
 
@@ -62,7 +73,11 @@ export function useTableToolbar(editor: Editor | null) {
     };
 
     editor.on("selectionUpdate", update);
-    editor.on("transaction", update);
+    // Skip pure-meta transactions (e.g. bubble-menu position pings) that
+    // never affect table geometry or merge capabilities.
+    editor.on("transaction", ({ transaction: tr }) => {
+      if (tr.docChanged || tr.selectionSet) update();
+    });
     editor.on("focus", update);
     window.addEventListener("resize", update);
     window.addEventListener("scroll", update, true);

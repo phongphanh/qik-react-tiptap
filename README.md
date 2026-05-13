@@ -1,8 +1,6 @@
 # react-tiptap-shadcn
 
-A publishable React rich text editor package built on Tiptap 3 and shadcn-style UI primitives.
-
-The editor is inspired by Tiptap's MIT-licensed Simple Editor template, but the floating menus are replaced with Radix/shadcn-style popover, dropdown, tooltip, separator, and button primitives.
+A publishable React rich text editor built on [Tiptap 3](https://tiptap.dev). UI primitives (tooltip, popover, dropdown, button, input, separator) are built from scratch on top of [Floating UI](https://floating-ui.com) — no Radix UI or shadcn dependency.
 
 ## Install
 
@@ -148,6 +146,7 @@ Return either a URL string or image attributes from `onImageUpload`:
 - **Highlight** — 20 highlight colors (vivid + pastel rows) with "Remove color" and native color picker
 - **Lists** — Bullet, Ordered, Task list via dropdown
 - **Alignment** — Left, Center, Right, Justify
+- **Indent / Outdent** — Indent and outdent controls
 - **Quote** — Blockquote toggle
 - **History** — Undo / Redo
 - **Clear formatting** — Strips all marks and block types
@@ -156,7 +155,7 @@ Return either a URL string or image attributes from `onImageUpload`:
 - **Table** — Grid picker (10 × 10, hover to select dimensions) for insertion
 
 ### Floating toolbar (text selection)
-Powered by Tiptap's BubbleMenu. Appears above any text selection and contains: block format, inline marks, text/highlight color, lists, alignment, quote, link, clear formatting.
+Powered by Tiptap's BubbleMenu with Floating UI positioning. Appears above any text selection and contains: block format, font size, inline marks, text/highlight color, lists, alignment, quote, link, clear formatting. Hidden inside code blocks where marks don't apply. Position updates every animation frame during scroll for smooth tracking.
 
 ### Link toolbar
 Appears when the cursor is inside a link. Shows the URL, with buttons to open in new tab, edit (URL-only popover), or remove the link.
@@ -188,17 +187,6 @@ pnpm typecheck  # type-check without emit
 
 No test suite is included.
 
-## Tailwind and shadcn
-
-Configured for Tailwind CSS v4 and shadcn/ui component generation.
-
-- Tailwind v4 entry: `src/tailwind.css`
-- shadcn config: `components.json`
-- shadcn UI target: `src/ui`
-- Utility alias: `@/lib/utils`
-
-The published stylesheet is `react-tiptap-shadcn/style.css` (not processed by Vite's lib build — copied by `scripts/copy-css.mjs`). All editor-specific CSS classes use the `rt-` prefix.
-
 ## CSS customization
 
 Override the CSS variables on `:root` (or a scoping selector) to theme the editor:
@@ -216,18 +204,25 @@ Override the CSS variables on `:root` (or a scoping selector) to theme the edito
   --rt-ring: rgba(37, 99, 235, 0.3);
   --rt-radius: 8px;
   --rt-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
+  --rt-editor-content-max-height: 500px;
 }
 ```
 
 Dark mode variables are applied automatically via `@media (prefers-color-scheme: dark)`.
 
-You can also force a mode per editor:
+You can also force a mode per editor instance:
 
 ```tsx
 <SimpleEditor theme="dark" />
 ```
 
 Or use app-level selectors such as `.dark`, `.light`, `[data-theme="dark"]`, or `[data-theme="light"]`.
+
+All editor-specific CSS classes use the `rt-` prefix. The published stylesheet is imported as:
+
+```ts
+import "react-tiptap-shadcn/style.css";
+```
 
 ## Rendering Saved Content
 

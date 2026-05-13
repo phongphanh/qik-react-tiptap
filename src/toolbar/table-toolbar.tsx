@@ -25,7 +25,11 @@ export function TableToolbar({ editor, state }: TableToolbarProps) {
   const toolbarRef = React.useRef<HTMLDivElement>(null);
   const [toolbarWidth, setToolbarWidth] = React.useState(480);
 
-  React.useLayoutEffect(() => {
+  // useEffect (not useLayoutEffect) so the width measurement happens after
+  // paint — avoids a synchronous setState → re-render chain during the burst
+  // of transactions that table insertion fires, which would exceed React's
+  // maximum update depth. A one-frame delay for width measurement is fine.
+  React.useEffect(() => {
     if (state && toolbarRef.current) {
       setToolbarWidth(toolbarRef.current.getBoundingClientRect().width);
     }

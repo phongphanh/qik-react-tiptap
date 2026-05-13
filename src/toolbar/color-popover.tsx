@@ -9,14 +9,16 @@ import type { ColorPaletteDefinition } from "./types";
 export interface ColorPopoverProps {
   active?: boolean;
   editor: Editor;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   palette: ColorPaletteDefinition;
 }
 
-export function ColorPopover({ active, editor, palette }: ColorPopoverProps) {
+export function ColorPopover({ active, editor, open, onOpenChange, palette }: ColorPopoverProps) {
   const colorInputRef = React.useRef<HTMLInputElement>(null);
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={onOpenChange}>
       <Tooltip>
         <TooltipTrigger asChild>
           <PopoverTrigger asChild>

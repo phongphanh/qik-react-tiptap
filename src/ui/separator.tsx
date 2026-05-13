@@ -1,14 +1,15 @@
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
+import * as React from "react";
 import { cn } from "../lib/utils";
 
 export function Separator({
   className,
   orientation = "vertical",
   ...props
-}: SeparatorPrimitive.SeparatorProps) {
+}: React.HTMLAttributes<HTMLDivElement> & { orientation?: "horizontal" | "vertical" }) {
   return (
-    <SeparatorPrimitive.Root
-      orientation={orientation}
+    <div
+      role="separator"
+      aria-orientation={orientation}
       className={cn("rt-separator", className)}
       {...props}
     />
