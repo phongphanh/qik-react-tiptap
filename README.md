@@ -45,6 +45,14 @@ export function EditorPage() {
 }
 ```
 
+## Guides
+
+- [Add custom extensions](./docs/guides/custom-extensions.md)
+- [Customize existing extensions](./docs/guides/customize-existing-extensions.md)
+- [Integrate with forms](./docs/guides/forms.md)
+- [Integrate with server image upload](./docs/guides/server-image-upload.md)
+- [Customize theme](./docs/guides/custom-theme.md)
+
 ### Props
 
 | Prop | Type | Default | Description |
