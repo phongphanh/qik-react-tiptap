@@ -13,6 +13,7 @@ import { Underline } from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 import { EnhancedImage } from "./image-extension";
 import { FontSize } from "./font-size";
+import { Indent } from "./indent";
 
 export interface CreateSimpleEditorExtensionsOptions {
   placeholder?: string;
@@ -29,6 +30,7 @@ export function createSimpleEditorExtensions({
     TextStyle,
     Color,
     FontSize,
+    Indent,
     Highlight.configure({ multicolor: true }),
     Link.configure({
       openOnClick: false,

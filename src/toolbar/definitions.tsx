@@ -10,6 +10,8 @@ import {
   Heading2,
   Heading3,
   Highlighter,
+  IndentDecrease,
+  IndentIncrease,
   Italic,
   List,
   ListOrdered,
@@ -183,6 +185,19 @@ export const toolbarGroups: ToolbarGroupDefinition[] = [
         command: (editor) => editor.chain().focus().setTextAlign("justify").run(),
         isActive: (editor) => editor.isActive({ textAlign: "justify" }),
       },
+      {
+        id: "outdent",
+        label: "Outdent",
+        icon: IndentDecrease,
+        command: (editor) => editor.chain().focus().outdent().run(),
+        isDisabled: (editor) => !selectionHasIndent(editor),
+      },
+      {
+        id: "indent",
+        label: "Indent",
+        icon: IndentIncrease,
+        command: (editor) => editor.chain().focus().indent().run(),
+      },
     ],
   },
   {
@@ -247,4 +262,20 @@ export const colorPalettes: ColorPaletteDefinition[] = [
 
 export function getToolbarButtons() {
   return toolbarGroups.flatMap((group) => group.items);
+}
+
+function selectionHasIndent(editor: Parameters<ToolbarButtonDefinition["command"]>[0]) {
+  const { from, to } = editor.state.selection;
+  let hasIndent = false;
+
+  editor.state.doc.nodesBetween(from, to, (node) => {
+    if (Number(node.attrs.indent ?? 0) > 0) {
+      hasIndent = true;
+      return false;
+    }
+
+    return true;
+  });
+
+  return hasIndent;
 }

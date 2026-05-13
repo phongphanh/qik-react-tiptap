@@ -6,6 +6,8 @@ export type {
 } from "./simple-editor";
 export { createSimpleEditorExtensions } from "./editor/extensions";
 export type { CreateSimpleEditorExtensionsOptions } from "./editor/extensions";
+export { Indent } from "./editor/indent";
+export type { IndentOptions } from "./editor/indent";
 export { cn } from "./lib/utils";
 export { Input } from "./ui/input";
 export {
