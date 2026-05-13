@@ -14,7 +14,7 @@ There is no test suite.
 
 ## Architecture
 
-This is a publishable React library (`react-tiptap-shadcn`) — a Tiptap 3 rich-text editor with shadcn/Radix UI primitives. The public API is exported from `src/index.ts`.
+This is a publishable React library (`react-editor-tiptap`) — a Tiptap 3 rich-text editor with shadcn/Radix UI primitives. The public API is exported from `src/index.ts`.
 
 ### Key layers
 
@@ -37,7 +37,7 @@ This is a publishable React library (`react-tiptap-shadcn`) — a Tiptap 3 rich-
 
 ### CSS
 
-- `src/styles.css` — the **published** stylesheet. All editor-specific classes use the `rt-` prefix (e.g., `rt-editor-shell`, `rt-prose`, `rt-floating-toolbar`). Imported by consumers as `react-tiptap-shadcn/style.css`.
+- `src/styles.css` — the **published** stylesheet. All editor-specific classes use the `rt-` prefix (e.g., `rt-editor-shell`, `rt-prose`, `rt-floating-toolbar`). Imported by consumers as `react-editor-tiptap/style.css`.
 - `src/tailwind.css` — Tailwind v4 entry, dev-only (not published).
 - `scripts/copy-css.mjs` — post-build step that copies `src/styles.css` → `dist/style.css` because Vite lib mode does not process the CSS file separately.
 

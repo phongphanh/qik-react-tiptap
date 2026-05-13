@@ -1,11 +1,11 @@
-# react-tiptap-shadcn
+# react-editor-tiptap
 
 A publishable React rich text editor built on [Tiptap 3](https://tiptap.dev). UI primitives (tooltip, popover, dropdown, button, input, separator) are built from scratch on top of [Floating UI](https://floating-ui.com) — no Radix UI or shadcn dependency.
 
 ## Install
 
 ```bash
-pnpm add react-tiptap-shadcn @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/core
+pnpm add react-editor-tiptap @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/core
 ```
 
 Install peer Tiptap extensions if your package manager does not install peers automatically:
@@ -30,8 +30,8 @@ pnpm add \
 ## Usage
 
 ```tsx
-import { SimpleEditor } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { SimpleEditor } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 export function EditorPage() {
   return (
@@ -230,7 +230,7 @@ Or use app-level selectors such as `.dark`, `.light`, `[data-theme="dark"]`, or 
 All editor-specific CSS classes use the `rt-` prefix. The published stylesheet is imported as:
 
 ```ts
-import "react-tiptap-shadcn/style.css";
+import "react-editor-tiptap/style.css";
 ```
 
 ## Rendering Saved Content
@@ -238,8 +238,8 @@ import "react-tiptap-shadcn/style.css";
 Use `RichTextContent` to render saved HTML or JSON with the same content styles:
 
 ```tsx
-import { RichTextContent } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { RichTextContent } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 export function Article({ html }: { html: string }) {
   return <RichTextContent content={html} />;

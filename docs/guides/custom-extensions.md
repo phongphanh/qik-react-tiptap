@@ -8,8 +8,8 @@ Pass an array of Tiptap extensions to append them after the built-in extensions.
 
 ```tsx
 import { Extension } from "@tiptap/core";
-import { SimpleEditor } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { SimpleEditor } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 const TrackChanges = Extension.create({
   name: "trackChanges",
@@ -59,7 +59,7 @@ If your custom extension uses the same Tiptap extension name as a built-in exten
 If content saved by the editor depends on a custom extension, pass the same extension to `RichTextContent` or `getRichTextHTML`.
 
 ```tsx
-import { RichTextContent } from "react-tiptap-shadcn";
+import { RichTextContent } from "react-editor-tiptap";
 
 export function Article({ content }: { content: unknown }) {
   return (

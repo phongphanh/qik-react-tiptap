@@ -5,8 +5,8 @@ Use `onImageUpload` when inserted files should be uploaded to your server instea
 ## Return a URL
 
 ```tsx
-import { SimpleEditor } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { SimpleEditor } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 export function Editor() {
   return (

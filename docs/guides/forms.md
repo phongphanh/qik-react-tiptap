@@ -6,8 +6,8 @@ Use `value`, `onChange`, `onBlur`, `invalid`, and `output` for form libraries su
 
 ```tsx
 import { Controller, useForm } from "react-hook-form";
-import { SimpleEditor } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { SimpleEditor } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 interface ArticleFormValues {
   body: string;

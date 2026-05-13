@@ -5,7 +5,7 @@ The editor uses CSS variables with the `rt-` prefix. Import the package styleshe
 ## Import Styles
 
 ```tsx
-import "react-tiptap-shadcn/style.css";
+import "react-editor-tiptap/style.css";
 ```
 
 ## Force Light, Dark, or System Mode
@@ -82,7 +82,7 @@ Use `className` to scope variables to one editor shell.
 `RichTextContent` uses the same content CSS and accepts the same `theme` values.
 
 ```tsx
-import { RichTextContent } from "react-tiptap-shadcn";
+import { RichTextContent } from "react-editor-tiptap";
 
 export function Article({ html }: { html: string }) {
   return <RichTextContent content={html} theme="dark" />;
@@ -91,7 +91,7 @@ export function Article({ html }: { html: string }) {
 
 ## Checklist
 
-- Import `react-tiptap-shadcn/style.css` once in the app.
+- Import `react-editor-tiptap/style.css` once in the app.
 - Override `--rt-*` variables instead of editing package CSS.
 - Use `theme` for per-instance mode control.
 - Theme `RichTextContent` the same way as `SimpleEditor` when displaying saved content.

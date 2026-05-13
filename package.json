@@ -1,5 +1,5 @@
 {
-  "name": "react-tiptap-shadcn",
+  "name": "react-editor-tiptap",
   "version": "0.1.0",
   "description": "A modern Tiptap React editor with shadcn-style UI primitives.",
   "type": "module",

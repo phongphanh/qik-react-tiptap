@@ -7,8 +7,8 @@ Use `extensionOptions` to configure or disable the editor's built-in extensions 
 Each key maps to the matching built-in extension configuration.
 
 ```tsx
-import { SimpleEditor } from "react-tiptap-shadcn";
-import "react-tiptap-shadcn/style.css";
+import { SimpleEditor } from "react-editor-tiptap";
+import "react-editor-tiptap/style.css";
 
 export function Editor() {
   return (
