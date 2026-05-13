@@ -42,6 +42,7 @@ export interface ColorPaletteDefinition {
 export interface ToolbarState {
   active: Record<string, boolean>;
   activeListId?: string;
+  characterCount: number;
   disabled: Record<string, boolean>;
   currentBlockLabel: string;
   currentFontSize: string | null;

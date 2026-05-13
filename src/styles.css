@@ -213,11 +213,26 @@
 
 .rt-editor-content {
   flex: 1;
+  min-height: 0;
   overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.rt-editor-footer {
+  display: flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--rt-border);
+  background: var(--rt-panel);
+  color: var(--rt-muted);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0 12px;
 }
 
 .rt-prose {
-  min-height: 470px;
+  min-height: 100%;
   padding: 1.5rem;
   outline: none;
   font-size: 16px;
@@ -785,7 +800,7 @@
   }
 
   .rt-prose {
-    min-height: calc(100dvh - 92px);
+    min-height: 100%;
     padding: 1.5rem;
   }
 

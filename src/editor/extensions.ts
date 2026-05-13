@@ -1,9 +1,7 @@
+import { CharacterCount } from "@tiptap/extension-character-count";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
-import { Table } from "@tiptap/extension-table";
-import { TableCell } from "@tiptap/extension-table-cell";
-import { TableHeader } from "@tiptap/extension-table-header";
-import { TableRow } from "@tiptap/extension-table-row";
+import { TableKit } from "@tiptap/extension-table";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
@@ -14,12 +12,15 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { EnhancedImage } from "./image-extension";
 import { FontSize } from "./font-size";
 import { Indent } from "./indent";
+import { PasteNormalizer } from "./paste-normalizer";
 
 export interface CreateSimpleEditorExtensionsOptions {
+  characterLimit?: number | null;
   placeholder?: string;
 }
 
 export function createSimpleEditorExtensions({
+  characterLimit = null,
   placeholder = "Write something...",
 }: CreateSimpleEditorExtensionsOptions = {}) {
   return [
@@ -31,6 +32,8 @@ export function createSimpleEditorExtensions({
     Color,
     FontSize,
     Indent,
+    PasteNormalizer,
+    CharacterCount.configure({ limit: characterLimit }),
     Highlight.configure({ multicolor: true }),
     Link.configure({
       openOnClick: false,
@@ -43,10 +46,12 @@ export function createSimpleEditorExtensions({
     EnhancedImage.configure({
       allowBase64: true,
     }),
-    Table.configure({ resizable: true }),
-    TableRow,
-    TableHeader,
-    TableCell,
+    TableKit.configure({
+      table: { resizable: true },
+      tableCell: {},
+      tableHeader: {},
+      tableRow: {},
+    }),
     TaskList,
     TaskItem.configure({ nested: true }),
     TextAlign.configure({ types: ["heading", "paragraph"] }),

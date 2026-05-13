@@ -8,6 +8,8 @@ export { createSimpleEditorExtensions } from "./editor/extensions";
 export type { CreateSimpleEditorExtensionsOptions } from "./editor/extensions";
 export { Indent } from "./editor/indent";
 export type { IndentOptions } from "./editor/indent";
+export { PasteNormalizer, normalizePastedHTML, normalizePastedText } from "./editor/paste-normalizer";
+export type { PasteNormalizerOptions } from "./editor/paste-normalizer";
 export { cn } from "./lib/utils";
 export { Input } from "./ui/input";
 export {

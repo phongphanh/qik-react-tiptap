@@ -6,6 +6,7 @@ import type { ToolbarState } from "./types";
 const emptyToolbarState: ToolbarState = {
   active: {},
   activeListId: undefined,
+  characterCount: 0,
   disabled: {},
   currentBlockLabel: "Paragraph",
   currentFontSize: null,
@@ -49,6 +50,7 @@ export function useToolbarState(editor: Editor | null) {
         return {
           active,
           activeListId,
+          characterCount: getCharacterCount(editor),
           disabled,
           currentBlockLabel: getCurrentBlockLabel(editor),
           currentFontSize,
@@ -56,6 +58,16 @@ export function useToolbarState(editor: Editor | null) {
       },
     }) ?? emptyToolbarState
   );
+}
+
+function getCharacterCount(editor: Editor) {
+  const storage = editor.storage as Editor["storage"] & {
+    characterCount?: {
+      characters?: () => number;
+    };
+  };
+
+  return storage.characterCount?.characters() ?? editor.getText().length;
 }
 
 function getCurrentBlockLabel(editor: Editor) {

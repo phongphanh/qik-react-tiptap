@@ -137,6 +137,10 @@ export function SimpleEditor({
         className={cn("rt-editor-content", editorClassName)}
       />
 
+      <div className="rt-editor-footer">
+        <span>{toolbarState.characterCount.toLocaleString()} characters</span>
+      </div>
+
       <FloatingToolbar
         editor={editor}
         state={toolbarState}
