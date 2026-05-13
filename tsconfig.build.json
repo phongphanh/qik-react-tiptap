@@ -8,6 +8,6 @@
     "declarationMap": true,
     "emitDeclarationOnly": false
   },
-  "include": ["src/index.ts", "src/simple-editor.tsx", "src/editor/**/*.ts", "src/lib/**/*.ts", "src/toolbar/**/*.ts", "src/toolbar/**/*.tsx", "src/ui/**/*.tsx", "src/vite-env.d.ts"],
+  "include": ["src/index.ts", "src/simple-editor.tsx", "src/rich-text-content.tsx", "src/theme.tsx", "src/editor/**/*.ts", "src/lib/**/*.ts", "src/toolbar/**/*.ts", "src/toolbar/**/*.tsx", "src/ui/**/*.tsx", "src/vite-env.d.ts"],
   "exclude": ["src/demo.tsx", "src/demo.css"]
 }

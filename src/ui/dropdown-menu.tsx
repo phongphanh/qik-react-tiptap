@@ -1,5 +1,6 @@
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { cn } from "../lib/utils";
+import { getThemeAttribute, useEditorTheme } from "../theme";
 
 export const DropdownMenu = DropdownMenuPrimitive.Root;
 export const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
@@ -11,11 +12,14 @@ export function DropdownMenuContent({
   sideOffset = 8,
   ...props
 }: DropdownMenuPrimitive.DropdownMenuContentProps) {
+  const theme = useEditorTheme();
+
   return (
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
         align={align}
         sideOffset={sideOffset}
+        data-rt-theme={getThemeAttribute(theme)}
         className={cn("rt-menu-content", className)}
         {...props}
       />

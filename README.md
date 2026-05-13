@@ -14,19 +14,18 @@ Install peer Tiptap extensions if your package manager does not install peers au
 
 ```bash
 pnpm add \
+  @tiptap/extension-character-count \
   @tiptap/extension-highlight \
   @tiptap/extension-image \
   @tiptap/extension-link \
   @tiptap/extension-placeholder \
+  @tiptap/extension-table \
   @tiptap/extension-task-item \
   @tiptap/extension-task-list \
   @tiptap/extension-text-align \
   @tiptap/extension-text-style \
   @tiptap/extension-underline \
-  @tiptap/extension-table \
-  @tiptap/extension-table-row \
-  @tiptap/extension-table-cell \
-  @tiptap/extension-table-header
+  @tiptap/extensions
 ```
 
 ## Usage
@@ -52,13 +51,91 @@ export function EditorPage() {
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `content` | `string \| JSONContent` | `"<h2>Start writing</h2>…"` | Initial HTML or ProseMirror JSON |
+| `value` | `string \| JSONContent` | — | Controlled value for form integrations |
+| `defaultValue` | `string \| JSONContent` | — | Uncontrolled initial value |
+| `output` | `"html" \| "json" \| "text"` | `"html"` | Value format passed to `onChange` |
 | `editable` | `boolean` | `true` | Toggle read-only mode |
 | `immediatelyRender` | `boolean` | `false` | Skip SSR hydration guard |
 | `className` | `string` | — | Class on the outer shell |
 | `editorClassName` | `string` | — | Class on the content area |
+| `editorProps` | `EditorOptions["editorProps"]` | — | Extra Tiptap editor props merged with the defaults |
+| `extensionOptions` | `SimpleEditorExtensionOptions` | — | Configure or disable built-in extensions |
+| `extensions` | `Extensions \| (defaults) => Extensions` | — | Append custom extensions or replace the full extension list |
+| `theme` | `"light" \| "dark" \| "system"` | `"system"` | Explicit editor theme |
+| `invalid` | `boolean` | — | Sets invalid state for form styling |
+| `name` | `string` | — | Stored as `data-name` for form/debug hooks |
 | `labels` | `SimpleEditorLabels` | — | Override placeholder strings |
-| `onUpdate` | `(payload) => void` | — | Fires on every change; receives `{ html, json, text }` |
-| `onImageUpload` | `(file) => Promise<string> \| string` | — | Custom upload handler; falls back to base64 |
+| `onChange` | `(value, payload) => void` | — | Form-friendly change callback |
+| `onBlur` | `() => void` | — | Fires when the editable area blurs |
+| `onUpdate` | `(payload) => void` | — | Fires on every change; receives `{ html, json, text, editor }` |
+| `onImageUpload` | `(file) => Promise<string \| ImageAttrs> \| string \| ImageAttrs` | — | Custom upload handler; falls back to base64 |
+| `onImageUploadError` | `(error, file) => void` | — | Handles upload failures |
+
+### Forms
+
+`SimpleEditor` can be used with React Hook Form's `Controller` by wiring `value`, `onChange`, and `onBlur`.
+
+```tsx
+<Controller
+  name="body"
+  control={form.control}
+  render={({ field, fieldState }) => (
+    <SimpleEditor
+      value={field.value}
+      output="html"
+      invalid={fieldState.invalid}
+      onBlur={field.onBlur}
+      onChange={field.onChange}
+    />
+  )}
+/>
+```
+
+Zod can validate the selected output format, for example `z.string().min(1)` for HTML/text or a JSON schema for `output="json"`.
+
+### Custom extensions
+
+Configure built-in extensions with `extensionOptions`:
+
+```tsx
+<SimpleEditor
+  extensionOptions={{
+    characterCount: { limit: 10000 },
+    link: { autolink: false },
+    table: { table: { resizable: true, renderWrapper: true, cellMinWidth: 80 } },
+  }}
+/>
+```
+
+Disable a built-in extension by setting it to `false`, or add custom extensions with `extensions`:
+
+```tsx
+<SimpleEditor
+  extensionOptions={{ highlight: false }}
+  extensions={(defaults) => [...defaults, MyCustomExtension]}
+/>
+```
+
+### Server image upload
+
+Return either a URL string or image attributes from `onImageUpload`:
+
+```tsx
+<SimpleEditor
+  onImageUpload={async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await fetch("/api/uploads", { method: "POST", body: formData });
+    const image = await res.json();
+
+    return { src: image.url, alt: image.alt };
+  }}
+  onImageUploadError={(error) => {
+    console.error(error);
+  }}
+/>
+```
 
 ## Features
 
@@ -142,3 +219,26 @@ Override the CSS variables on `:root` (or a scoping selector) to theme the edito
 ```
 
 Dark mode variables are applied automatically via `@media (prefers-color-scheme: dark)`.
+
+You can also force a mode per editor:
+
+```tsx
+<SimpleEditor theme="dark" />
+```
+
+Or use app-level selectors such as `.dark`, `.light`, `[data-theme="dark"]`, or `[data-theme="light"]`.
+
+## Rendering Saved Content
+
+Use `RichTextContent` to render saved HTML or JSON with the same content styles:
+
+```tsx
+import { RichTextContent } from "react-tiptap-shadcn";
+import "react-tiptap-shadcn/style.css";
+
+export function Article({ html }: { html: string }) {
+  return <RichTextContent content={html} />;
+}
+```
+
+For server-side or custom rendering pipelines, use `getRichTextHTML(content)`.
